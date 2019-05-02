@@ -470,7 +470,7 @@ xcopy /y /i ..\bin\ICSharpCode.SharpZipLib.dll GitExtensions\
 IF ERRORLEVEL 1 EXIT /B 1
 xcopy /y /i ..\GitExtensions\bin\%Configuration%\ICSharpCode.TextEditor.dll GitExtensions\
 IF ERRORLEVEL 1 EXIT /B 1
-xcopy /y /i ..\GitExtensions\bin\%Configuration%\Microsoft.AI.ServerTelemetryChannel.dll GitExtensions\
+xcopy /y /i ..\GitExtensions\bin\%Configuration%\AppInsights.WindowsDesktop.dll GitExtensions\
 IF ERRORLEVEL 1 EXIT /B 1
 xcopy /y /i ..\GitExtensions\bin\%Configuration%\Microsoft.ApplicationInsights.dll GitExtensions\
 IF ERRORLEVEL 1 EXIT /B 1

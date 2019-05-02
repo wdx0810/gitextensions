@@ -1,4 +1,7 @@
-﻿using System;
+﻿// The original idea and the implementation are borrowed from  https://github.com/NuGetPackageExplorer/NuGetPackageExplorer
+// Credits to Oren Novotny
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,9 +13,6 @@ using Microsoft.ApplicationInsights.Extensibility;
 
 namespace GitUI.Infrastructure.Telemetry
 {
-    // The original idea and the implementation are borrowed from  https://github.com/NuGetPackageExplorer/NuGetPackageExplorer
-    // Credits to Oren Novotny
-
     public static class DiagnosticsClient
     {
         private static bool _initialized;
