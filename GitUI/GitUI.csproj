@@ -53,6 +53,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
@@ -64,6 +65,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell">
       <Version>1.1.3.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel">
+      <Version>2.9.1</Version>
     </PackageReference>
     <PackageReference Include="System.IO.Abstractions">
       <Version>2.0.0.144</Version>
@@ -328,6 +332,9 @@
     <Compile Include="Editor\GitHighlightingStrategyBase.cs" />
     <Compile Include="Editor\RebaseTodoHighlightingStrategy.cs" />
     <Compile Include="FindFilePredicateProvider.cs" />
+    <Compile Include="Infrastructure\Telemetry\AppInfoTelemetryInitializer.cs" />
+    <Compile Include="Infrastructure\Telemetry\DeviceTelemetryInitializer.cs" />
+    <Compile Include="Infrastructure\Telemetry\DiagnosticsClient.cs" />
     <Compile Include="Properties\Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

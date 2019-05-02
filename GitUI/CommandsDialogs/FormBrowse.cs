@@ -24,6 +24,7 @@ using GitUI.CommandsDialogs.BrowseDialog;
 using GitUI.CommandsDialogs.BrowseDialog.DashboardControl;
 using GitUI.CommandsDialogs.WorktreeDialog;
 using GitUI.Hotkey;
+using GitUI.Infrastructure.Telemetry;
 using GitUI.Properties;
 using GitUI.Script;
 using GitUI.UserControls;
@@ -507,7 +508,35 @@ namespace GitUI.CommandsDialogs
             toolStripButtonPush.Initialize(_aheadBehindDataProvider);
             toolStripButtonPush.DisplayAheadBehindInformation(Module.GetSelectedBranch());
 
+            ReportDiagnostics();
+
             base.OnLoad(e);
+
+            void ReportDiagnostics()
+            {
+                DiagnosticsClient.TrackEvent("Startup.FormBrowse",
+                    new Dictionary<string, string>
+                    {
+                        // layout
+                        { "ShowLeftPanel", MainSplitContainer.Panel1Collapsed.ToString() },
+                        { nameof(AppSettings.ShowSplitViewLayout), AppSettings.ShowSplitViewLayout.ToString() },
+                        { nameof(AppSettings.CommitInfoPosition), AppSettings.CommitInfoPosition.ToString() },
+
+                        // revision grid
+                        { nameof(AppSettings.ShowAuthorAvatarColumn), AppSettings.ShowAuthorAvatarColumn.ToString() },
+                        { nameof(AppSettings.ShowAuthorNameColumn), AppSettings.ShowAheadBehindData.ToString() },
+                        { nameof(AppSettings.ShowBuildStatusIconColumn), AppSettings.ShowBuildStatusIconColumn.ToString() },
+                        { nameof(AppSettings.ShowBuildStatusTextColumn), AppSettings.ShowBuildStatusTextColumn.ToString() },
+
+                        // commit info panel
+                        { nameof(AppSettings.ShowAuthorAvatarInCommitInfo), AppSettings.ShowAuthorAvatarInCommitInfo.ToString() },
+                        { nameof(AppSettings.ShowGpgInformation), AppSettings.ShowGpgInformation.ValueOrDefault.ToString() },
+
+                        // other
+                        { nameof(AppSettings.ShowAheadBehindData), AppSettings.ShowAheadBehindData.ToString() },
+                        { nameof(AppSettings.CurrentTranslation), AppSettings.CurrentTranslation },
+                    });
+            }
         }
 
         protected override void OnActivated(EventArgs e)
@@ -2985,12 +3014,18 @@ namespace GitUI.CommandsDialogs
         private void toggleSplitViewLayout_Click(object sender, EventArgs e)
         {
             AppSettings.ShowSplitViewLayout = !AppSettings.ShowSplitViewLayout;
+            DiagnosticsClient.TrackEvent("Layout change",
+                new Dictionary<string, string> { { nameof(AppSettings.ShowSplitViewLayout), AppSettings.ShowSplitViewLayout.ToString() } });
+
             RefreshSplitViewLayout();
         }
 
         private void toggleBranchTreePanel_Click(object sender, EventArgs e)
         {
             MainSplitContainer.Panel1Collapsed = !MainSplitContainer.Panel1Collapsed;
+            DiagnosticsClient.TrackEvent("Layout change",
+                new Dictionary<string, string> { { "ShowLeftPanel", MainSplitContainer.Panel1Collapsed.ToString() } });
+
             RefreshLayoutToggleButtonStates();
         }
 
@@ -3016,6 +3051,9 @@ namespace GitUI.CommandsDialogs
         private void SetCommitInfoPosition(CommitInfoPosition position)
         {
             AppSettings.CommitInfoPosition = position;
+            DiagnosticsClient.TrackEvent("Layout change",
+                new Dictionary<string, string> { { nameof(AppSettings.CommitInfoPosition), AppSettings.CommitInfoPosition.ToString() } });
+
             LayoutRevisionInfo();
             RefreshLayoutToggleButtonStates();
         }
@@ -3023,6 +3061,9 @@ namespace GitUI.CommandsDialogs
         private void RefreshSplitViewLayout()
         {
             RightSplitContainer.Panel2Collapsed = !AppSettings.ShowSplitViewLayout;
+            DiagnosticsClient.TrackEvent("Layout change",
+                new Dictionary<string, string> { { nameof(AppSettings.ShowSplitViewLayout), AppSettings.ShowSplitViewLayout.ToString() } });
+
             RefreshLayoutToggleButtonStates();
         }
 

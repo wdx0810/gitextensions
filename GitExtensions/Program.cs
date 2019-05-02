@@ -9,6 +9,7 @@ using GitExtUtils.GitUI;
 using GitUI;
 using GitUI.CommandsDialogs.SettingsDialog;
 using GitUI.CommandsDialogs.SettingsDialog.Pages;
+using GitUI.Infrastructure.Telemetry;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.Threading;
 using ResourceManager;
@@ -47,6 +48,13 @@ namespace GitExtensions
                     UserEnvironmentInformation.Initialise(ThisAssembly.Git.Sha, ThisAssembly.Git.IsDirty);
                     return UserEnvironmentInformation.GetInformation();
                 };
+
+                DiagnosticsClient.Initialize(ThisAssembly.Git.IsDirty);
+
+                // Report diagnostics irrespective of whether a debugger attached or not
+                Application.ApplicationExit += (s, e) => DiagnosticsClient.OnExit();
+                AppDomain.CurrentDomain.UnhandledException += (s, e) => DiagnosticsClient.Notify((Exception)e.ExceptionObject);
+                Application.ThreadException += (s, e) => DiagnosticsClient.Notify(e.Exception);
 
                 if (!Debugger.IsAttached)
                 {
