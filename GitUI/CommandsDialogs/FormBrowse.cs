@@ -507,6 +507,7 @@ namespace GitUI.CommandsDialogs
 
             toolStripButtonPush.Initialize(_aheadBehindDataProvider);
             toolStripButtonPush.DisplayAheadBehindInformation(Module.GetSelectedBranch());
+            tsbtnEnableTelemetry.Checked = AppSettings.TelemetryEnabled;
 
             ReportDiagnostics();
 
@@ -3234,6 +3235,11 @@ namespace GitUI.CommandsDialogs
             {
                 e.Effect = DragDropEffects.Move;
             }
+        }
+
+        private void TsbtnEnableTelemetry_Click(object sender, EventArgs e)
+        {
+            AppSettings.TelemetryEnabled = tsbtnEnableTelemetry.Checked;
         }
     }
 }

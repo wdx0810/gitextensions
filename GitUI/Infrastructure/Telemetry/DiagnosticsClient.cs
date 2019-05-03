@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using GitCommands;
 using GitExtUtils.GitUI;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -16,13 +17,13 @@ namespace GitUI.Infrastructure.Telemetry
     public static class DiagnosticsClient
     {
         private static bool _initialized;
-
         private static TelemetryClient _client;
+
+        private static bool Enabled => _initialized && AppSettings.TelemetryEnabled;
 
         public static void Initialize(bool isDirty)
         {
             TelemetryConfiguration.Active.InstrumentationKey = "2ef275e3-8850-4305-9d7c-825a60c3d296";
-            TelemetryConfiguration.Active.TelemetryChannel.DeveloperMode = Debugger.IsAttached;
             TelemetryConfiguration.Active.TelemetryInitializers.Add(new AppInfoTelemetryInitializer(isDirty));
             TelemetryConfiguration.Active.TelemetryInitializers.Add(new DeviceTelemetryInitializer());
 
@@ -46,7 +47,7 @@ namespace GitUI.Infrastructure.Telemetry
 
         public static void OnExit()
         {
-            if (!_initialized)
+            if (!Enabled)
             {
                 return;
             }
@@ -59,7 +60,7 @@ namespace GitUI.Infrastructure.Telemetry
 
         public static void TrackEvent(string eventName, IDictionary<string, string> properties = null, IDictionary<string, double> metrics = null)
         {
-            if (!_initialized)
+            if (!Enabled)
             {
                 return;
             }
@@ -69,7 +70,7 @@ namespace GitUI.Infrastructure.Telemetry
 
         public static void TrackTrace(string evt)
         {
-            if (!_initialized)
+            if (!Enabled)
             {
                 return;
             }
@@ -79,7 +80,7 @@ namespace GitUI.Infrastructure.Telemetry
 
         public static void Notify(Exception exception)
         {
-            if (!_initialized)
+            if (!Enabled)
             {
                 return;
             }
@@ -89,7 +90,7 @@ namespace GitUI.Infrastructure.Telemetry
 
         public static void TrackPageView(string pageName)
         {
-            if (!_initialized)
+            if (!Enabled)
             {
                 return;
             }
