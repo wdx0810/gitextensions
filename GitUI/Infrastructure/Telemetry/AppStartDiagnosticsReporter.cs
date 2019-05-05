@@ -17,7 +17,7 @@ namespace GitUI.Infrastructure.Telemetry
             }
             else if (GitCommandHelpers.Plink())
             {
-                sshClient = "PutTy";
+                sshClient = "PuTTY";
             }
             else
             {
