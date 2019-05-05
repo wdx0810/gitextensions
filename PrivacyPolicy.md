@@ -33,18 +33,3 @@ Includes:
 * Number of monitors
 * Resolution of all monitors
 * Primary monitor DPI / scale factor
-
-## Package Sources
-
-**OS information and IP address**
-
-When Git Extensions makes web requests to http://nuget.org to retrieve NuGet packages data, it includes user's machine's OS information in the User-Agent header. The author of Git Extensions does not have access to this information, but the website http://nuget.org does and it logs this information.
-The website will also log user's IP address. Again, the author of Git Extensions does not have access to this data.
-
-**3rd-party package source**
-
-When user specifies a different package source than the default source at http://nuget.org, he/she will be subjected to the privacy policy of that website. Git Extensions does not send any such data to its author.
-
-## Third-Party Policies
-
-* Microsoft Store https://docs.microsoft.com/en-us/legal/windows/agreements/store-policies
