@@ -333,7 +333,6 @@
     <Compile Include="Editor\RebaseTodoHighlightingStrategy.cs" />
     <Compile Include="FindFilePredicateProvider.cs" />
     <Compile Include="Infrastructure\Telemetry\AppInfoTelemetryInitializer.cs" />
-    <Compile Include="Infrastructure\Telemetry\RepoOpenedDiagnosticsReporter.cs" />
     <Compile Include="Infrastructure\Telemetry\AppStartDiagnosticsReporter.cs" />
     <Compile Include="Infrastructure\Telemetry\DiagnosticsClient.cs" />
     <Compile Include="Infrastructure\Telemetry\FormBrowseDiagnosticsReporter.cs" />
