@@ -25,7 +25,7 @@ namespace GitUI.Infrastructure.Telemetry
 
                     // revision grid
                     { nameof(AppSettings.ShowAuthorAvatarColumn), AppSettings.ShowAuthorAvatarColumn.ToString() },
-                    { nameof(AppSettings.ShowAuthorNameColumn), AppSettings.ShowAheadBehindData.ToString() },
+                    { nameof(AppSettings.ShowAuthorNameColumn), AppSettings.ShowAuthorNameColumn.ToString() },
                     { nameof(AppSettings.ShowBuildStatusIconColumn), AppSettings.ShowBuildStatusIconColumn.ToString() },
                     { nameof(AppSettings.ShowBuildStatusTextColumn), AppSettings.ShowBuildStatusTextColumn.ToString() },
 
