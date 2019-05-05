@@ -333,8 +333,10 @@
     <Compile Include="Editor\RebaseTodoHighlightingStrategy.cs" />
     <Compile Include="FindFilePredicateProvider.cs" />
     <Compile Include="Infrastructure\Telemetry\AppInfoTelemetryInitializer.cs" />
-    <Compile Include="Infrastructure\Telemetry\DeviceTelemetryInitializer.cs" />
+    <Compile Include="Infrastructure\Telemetry\RepoOpenedDiagnosticsReporter.cs" />
+    <Compile Include="Infrastructure\Telemetry\AppStartDiagnosticsReporter.cs" />
     <Compile Include="Infrastructure\Telemetry\DiagnosticsClient.cs" />
+    <Compile Include="Infrastructure\Telemetry\FormBrowseDiagnosticsReporter.cs" />
     <Compile Include="Properties\Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1755,6 +1757,9 @@
     <Compile Include="Script\SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <None Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="gituikey.snk.pfx" />
     <None Include="Properties\DataSources\GitCommands.GitItem.datasource" />
     <None Include="Properties\DataSources\GitCommands.GitItemStatus.datasource" />

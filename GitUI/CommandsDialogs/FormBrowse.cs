@@ -99,7 +99,7 @@ namespace GitUI.CommandsDialogs
         [CanBeNull] private readonly IAheadBehindDataProvider _aheadBehindDataProvider;
         private readonly WindowsJumpListManager _windowsJumpListManager;
         private readonly SubmoduleStatusProvider _submoduleStatusProvider;
-
+        private readonly FormBrowseDiagnosticsReporter _formBrowseDiagnosticsReporter;
         [CanBeNull] private BuildReportTabPageExtension _buildReportTabPageExtension;
         private ConEmuControl _terminal;
         private Dashboard _dashboard;
@@ -131,6 +131,8 @@ namespace GitUI.CommandsDialogs
             : base(commands)
         {
             InitializeComponent();
+
+            _formBrowseDiagnosticsReporter = new FormBrowseDiagnosticsReporter(this);
 
             commandsToolStripMenuItem.DropDownOpening += CommandsToolStripMenuItem_DropDownOpening;
 
@@ -509,35 +511,9 @@ namespace GitUI.CommandsDialogs
             toolStripButtonPush.DisplayAheadBehindInformation(Module.GetSelectedBranch());
             tsbtnEnableTelemetry.Checked = AppSettings.TelemetryEnabled;
 
-            ReportDiagnostics();
+            _formBrowseDiagnosticsReporter.Report();
 
             base.OnLoad(e);
-
-            void ReportDiagnostics()
-            {
-                DiagnosticsClient.TrackEvent("Startup.FormBrowse",
-                    new Dictionary<string, string>
-                    {
-                        // layout
-                        { "ShowLeftPanel", MainSplitContainer.Panel1Collapsed.ToString() },
-                        { nameof(AppSettings.ShowSplitViewLayout), AppSettings.ShowSplitViewLayout.ToString() },
-                        { nameof(AppSettings.CommitInfoPosition), AppSettings.CommitInfoPosition.ToString() },
-
-                        // revision grid
-                        { nameof(AppSettings.ShowAuthorAvatarColumn), AppSettings.ShowAuthorAvatarColumn.ToString() },
-                        { nameof(AppSettings.ShowAuthorNameColumn), AppSettings.ShowAheadBehindData.ToString() },
-                        { nameof(AppSettings.ShowBuildStatusIconColumn), AppSettings.ShowBuildStatusIconColumn.ToString() },
-                        { nameof(AppSettings.ShowBuildStatusTextColumn), AppSettings.ShowBuildStatusTextColumn.ToString() },
-
-                        // commit info panel
-                        { nameof(AppSettings.ShowAuthorAvatarInCommitInfo), AppSettings.ShowAuthorAvatarInCommitInfo.ToString() },
-                        { nameof(AppSettings.ShowGpgInformation), AppSettings.ShowGpgInformation.ValueOrDefault.ToString() },
-
-                        // other
-                        { nameof(AppSettings.ShowAheadBehindData), AppSettings.ShowAheadBehindData.ToString() },
-                        { nameof(AppSettings.CurrentTranslation), AppSettings.CurrentTranslation },
-                    });
-            }
         }
 
         protected override void OnActivated(EventArgs e)
@@ -671,6 +647,8 @@ namespace GitUI.CommandsDialogs
             _dashboard.RefreshContent();
             _dashboard.Visible = true;
             _dashboard.BringToFront();
+
+            DiagnosticsClient.TrackPageView("Dashboard");
         }
 
         private void HideDashboard()
@@ -688,6 +666,8 @@ namespace GitUI.CommandsDialogs
             toolPanel.LeftToolStripPanelVisible = true;
             toolPanel.RightToolStripPanelVisible = true;
             toolPanel.ResumeLayout();
+
+            DiagnosticsClient.TrackPageView("Revision graph");
         }
 
         private void UpdatePluginMenu(bool validWorkingDir)

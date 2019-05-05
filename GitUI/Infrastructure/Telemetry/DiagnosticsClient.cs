@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using GitCommands;
 using GitExtUtils.GitUI;
@@ -23,26 +20,13 @@ namespace GitUI.Infrastructure.Telemetry
 
         public static void Initialize(bool isDirty)
         {
-            TelemetryConfiguration.Active.InstrumentationKey = "2ef275e3-8850-4305-9d7c-825a60c3d296";
             TelemetryConfiguration.Active.TelemetryInitializers.Add(new AppInfoTelemetryInitializer(isDirty));
-            TelemetryConfiguration.Active.TelemetryInitializers.Add(new DeviceTelemetryInitializer());
 
             _initialized = true;
 
             _client = new TelemetryClient();
 
-            var properties = new Dictionary<string, string>
-            {
-                // environment
-                { "DotNetVersion", RuntimeInformation.FrameworkDescription },
-
-                // languages
-                { "CurrentCulture", CultureInfo.CurrentCulture.Name },
-                { "CurrentUICulture", CultureInfo.CurrentUICulture.Name }
-            };
-            AttachMonitorInformation(properties);
-
-            _client.TrackEvent("Startup.Environment", properties);
+            _client.TrackEvent("Monitors", AttachMonitorInformation());
         }
 
         public static void OnExit()
@@ -98,17 +82,22 @@ namespace GitUI.Infrastructure.Telemetry
             _client.TrackPageView(pageName);
         }
 
-        private static void AttachMonitorInformation(Dictionary<string, string> properties)
+        private static Dictionary<string, string> AttachMonitorInformation()
         {
-            properties["Monitors"] = Screen.AllScreens.Length.ToString();
-            properties["Monitor-Primary-Dpi"] = $"{DpiUtil.DpiX}dpi ({(DpiUtil.ScaleX == 1 ? "no" : $"{Math.Round(DpiUtil.ScaleX * 100)}%")} scaling)";
+            var properties = new Dictionary<string, string>();
+            properties["Count"] = Screen.AllScreens.Length.ToString();
+            properties["Primary DPI"] = DpiUtil.DpiX.ToString();
+            properties["Primary scaling"] = $"{(DpiUtil.ScaleX == 1 ? "no" : $"{Math.Round(DpiUtil.ScaleX * 100)}%")} scaling";
 
             for (int i = 0; i < Screen.AllScreens.Length; i++)
             {
-                var key = Screen.AllScreens[i].Primary ? "Monitor-Primary" : $"Monitor-{i}";
+                var key = Screen.AllScreens[i].Primary ? "Primary" : $"Secondary {i}";
 
-                properties[$"{key}-Resolution"] = Screen.AllScreens[i].Bounds.ToString();
+                var bounds = Screen.AllScreens[i].Bounds;
+                properties[$"{key} resolution"] = $"{bounds.Width}x{bounds.Height}";
             }
+
+            return properties;
         }
     }
 }

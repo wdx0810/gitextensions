@@ -50,9 +50,13 @@ namespace GitExtensions
                 };
 
                 DiagnosticsClient.Initialize(ThisAssembly.Git.IsDirty);
+                Application.ApplicationExit += (s, e) =>
+                {
+                    DiagnosticsClient.TrackEvent("AppExit");
+                    DiagnosticsClient.OnExit();
+                };
 
                 // Report diagnostics irrespective of whether a debugger attached or not
-                Application.ApplicationExit += (s, e) => DiagnosticsClient.OnExit();
                 AppDomain.CurrentDomain.UnhandledException += (s, e) => DiagnosticsClient.Notify((Exception)e.ExceptionObject);
                 Application.ThreadException += (s, e) => DiagnosticsClient.Notify(e.Exception);
 
@@ -94,6 +98,9 @@ namespace GitExtensions
             }
 
             AppSettings.LoadSettings();
+
+            new AppStartDiagnosticsReporter().Report();
+
             if (EnvUtils.RunningOnWindows())
             {
                 WebBrowserEmulationMode.SetBrowserFeatureControl();
